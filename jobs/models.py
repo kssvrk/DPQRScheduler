@@ -6,11 +6,11 @@ class Script(models.Model):
     script_id=models.AutoField(primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    script_name= models.CharField(max_length=30, unique=True)
+    #script_name= models.CharField(max_length=30, unique=True)
     script_path=models.CharField(max_length=1000,unique=True)
 
     def __str__(self):
-        return (str(self.script_id)+":"+str(self.script_name))
+        return (str(self.script_id)+":"+str(self.script_path))
 
 class Jobs(models.Model):
     #--- status enumeration---
@@ -41,6 +41,7 @@ class Jobs(models.Model):
     priority=models.IntegerField()
     schedule_at=models.DateTimeField(default=datetime.now,blank=True)
     job_description=models.CharField(max_length=1000)
+    result_description=models.CharField(max_length=1000,null=True)
     job_name=models.CharField(max_length=30)
 
     def __str__(self):
