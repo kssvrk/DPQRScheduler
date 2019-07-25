@@ -2,7 +2,9 @@
 #------------------ django models init --------------------
 import os,django,sys
 scheduler_dir='/home/nrsc/radha/projects/rqscheduler/DPQRScheduler/scheduler/'
-sys.path.insert(0,scheduler_dir) 
+sys.path.insert(0,scheduler_dir)
+scripts_dir='/home/radhakrishna/projects/py/rqscheduler/scheduler/procjobs/'
+sys.path.insert(0,scripts_dir)
 os.environ['DJANGO_SETTINGS_MODULE'] = 'scheduler.settings'
 django.setup()
 #-------------------------------------------------------
@@ -14,9 +16,9 @@ from datetime import datetime
 from loguru import logger
 
 #------------------- JOBS-LIST ----------------
-from scripts.TestScripts.BasicTests import printandsleep
+from TestScripts.BasicTests import printandsleep
 #----------------------------------------------
-log_path='/home/nrsc/radha/projects/rqscheduler/logs/job_server/'
+log_path='/home/radhakrishna/projects/py/rqscheduler/logs/scheduler_logs/'
 
 logger.add(log_path+"file_{time}.log",rotation="500 MB")
 
@@ -49,7 +51,12 @@ def JobServerLoop():
         rscript=Script.objects.values('script_path').get(script_id=rjob['script_id'])
         method_to_call = loaded_scripts[rscript['script_path']]
         #PUSH TO QUEUE
-        job = q.enqueue(method_to_call, arguments)
+        job = q.enqueue(method_to_call, arguments,job_timeout='2h')
+        curr_job=Jobs.objects.get(job_id=arguments['job_id'])
+        #curr_job.started_at=time_now
+        curr_job.status='TAKENQ'
+        #curr_job.log_location=log_location
+        curr_job.save()
 
 
 

@@ -18,12 +18,14 @@ class Jobs(models.Model):
     NOTSTARTED='NOT_STARTED'
     SUCCESSFUL='SUCCESSFUL'
     FAILURE='FAILURE'
+    TAKENQ='TAKENQ'
 
     status_choices=(
     (INPROCESS,'Processing'),
     (NOTSTARTED,'Not_yet_started'),
     (SUCCESSFUL,'Finished_succesfully'),
-    (FAILURE,'Failed')
+    (FAILURE,'Failed'),
+    (TAKENQ,'Taken_by_Q')
     )
     #-------------------
 
@@ -43,6 +45,7 @@ class Jobs(models.Model):
     job_description=models.CharField(max_length=1000)
     result_description=models.CharField(max_length=1000,null=True)
     job_name=models.CharField(max_length=30)
+    log_location=models.CharField(max_length=1000,null=True)
 
     def __str__(self):
         return (str(self.job_name)+":"+str(self.job_id)+":"+str(self.schedule_at))

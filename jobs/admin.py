@@ -3,7 +3,7 @@ from jobs.models import Script,Jobs
 
 
 class JobsAdmin(admin.ModelAdmin):
-    exclude = ('started_at','finished_at','created_at','status','result_description')
+    exclude = ('started_at','finished_at','created_at','status','result_description','log_location')
 
 # Register your models here.
 admin.site.register(Script)

@@ -1,0 +1,60 @@
+<html>
+<head>
+<title>Job Log Viewer</title>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
+<!------ Include the above in your HEAD tag ---------->
+<link rel="stylesheet"
+      href="https://highlightjs.org/static/demo/styles/qtcreator_dark.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body style="background-color:black;">
+
+
+  		 <pre><code class="accesslog" id="logarea"></code></pre>
+
+{{log_lines|json_script:"log_lines"}}
+{{job_id|json_script:"job_id"}}
+{{last_line|json_script:"last_line"}}
+<a id='bottomDiv'></a>
+<script>
+
+
+
+//for val in valueconsole.log(value);
+$( document ).ready(function() {
+  var value = JSON.parse(document.getElementById('log_lines').textContent);
+  var job_id = JSON.parse(document.getElementById('job_id').textContent);
+  var last_line = JSON.parse(document.getElementById('last_line').textContent);
+  console.log(last_line)
+  function UpdateLog(value){
+  for (let val of value) {
+    var text=$('#logarea').text();
+    $('#logarea').text(text+val);
+  }
+  document.getElementById('bottomDiv').scrollIntoView(true);
+  }
+  UpdateLog(value)
+  var log_update = function() {
+    //your jQuery ajax code
+    $.post("http://localhost:8000/jobs/results/", {job_id:job_id,last_line:last_line}, function(result){
+      UpdateLog(result['log_lines'],last_line=result['last_line']);
+      hljs.initHighlighting.called=false;
+      hljs.initHighlighting();
+    });
+  };
+
+  setInterval(log_update, 500);
+
+
+});
+
+//console.log(jobid);
+
+</script>
+
+</body>
+</html>

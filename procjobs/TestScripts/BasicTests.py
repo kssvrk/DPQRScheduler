@@ -2,7 +2,7 @@
 #------------------ django models init --------------------
 import os,django,sys
 scheduler_dir='/home/nrsc/radha/projects/rqscheduler/DPQRScheduler/scheduler/'
-sys.path.insert(0,scheduler_dir) 
+sys.path.insert(0,scheduler_dir)
 os.environ['DJANGO_SETTINGS_MODULE'] = 'scheduler.settings'
 django.setup()
 #-------------------------------------------------------
@@ -13,15 +13,18 @@ import time
 
 
 def printandsleep(arguments):
+
+    log_location="/home/radhakrishna/projects/py/rqscheduler/logs/test_print_n_sleep_2s/"
+    required_args=['number','stime','job_id']
     time_now=datetime.now()
     #--------------UPDATING DATABASE------------------------
     curr_job=Jobs.objects.get(job_id=arguments['job_id'])
     curr_job.started_at=time_now
     curr_job.status='IN_PROCESS'
+    curr_job.log_location=log_location
     curr_job.save()
     #---------------------------------------------------
-    log_location="/home/nrsc/radha/projects/rqscheduler/logs/test_print_n_sleep_2s/"
-    required_args=['number','stime','job_id']
+
     try:
         if all(arg not in arguments.keys() for arg in required_args):
             logger.error('Arguments passed are improper')
