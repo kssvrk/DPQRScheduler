@@ -24,6 +24,8 @@ loaded_scripts={
     "printandsleep":printandsleep
 }
 
+polling_time=10
+
 def JobServerLoop():
     #------------ JOB SERVING MECHANISM ----------------------
 
@@ -53,4 +55,7 @@ def JobServerLoop():
 
 
 if __name__=="__main__":
-    JobServerLoop()
+    while(True):
+        logger.info('...Fetching Pending Jobs...')
+        JobServerLoop()
+        time.sleep(polling_time)
