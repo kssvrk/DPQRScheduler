@@ -3,8 +3,8 @@ from loguru import logger
 import time
 
 def printandsleep(arguments):
-    log_location="/home/radhakrishna/projects/py/rqscheduler/logs/test_print_n_sleep_2s/"
-    required_args=['number','stime','jobid']
+    log_location="/home/nrsc/radha/projects/rqscheduler/logs/test_print_n_sleep_2s/"
+    required_args=['number','stime','job_id']
     try:
         if all(arg not in arguments.keys() for arg in required_args):
             logger.error('Arguments passed are improper')
@@ -13,7 +13,7 @@ def printandsleep(arguments):
         #logger.enable()
         #logger.start(sys.stderr)
         #logger.start(sys.stdout)
-        d=logger.add(log_location+str(arguments['jobid'])+".log")
+        d=logger.add(log_location+str(arguments['job_id'])+".log")
         logger.info("Script :  Test , Print n , while sleeping 2s")
         #logger.add(sys.stderr, format="{time} {level} {message}")
         #logger.add(sys.stdout, format="{time} {level} {message}")
@@ -30,6 +30,7 @@ def printandsleep(arguments):
         logger.exception("What??!! :: = > Uncatched Exception")
         #logger.close()
         #logger.stop(x)
+        logger.stop(d)
         return [110,'Exception occured '+str(e)]
 
 

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.postgres.fields import JSONField
+from datetime import datetime
 # Create your models here.
 class Script(models.Model):
     script_id=models.AutoField(primary_key=True)
@@ -38,9 +39,9 @@ class Jobs(models.Model):
         )
     started_at=models.DateTimeField(null=True)
     priority=models.IntegerField()
-    schedule_at=models.DateTimeField(auto_now_add=True)
+    schedule_at=models.DateTimeField(default=datetime.now,blank=True)
     job_description=models.CharField(max_length=1000)
-    job_name=models.CharField(max_length=30, unique=True)
+    job_name=models.CharField(max_length=30)
 
     def __str__(self):
-        return (str(job_name)+":"+str(job_id)+":"+str(schedule_at))
+        return (str(self.job_name)+":"+str(self.job_id)+":"+str(self.schedule_at))
